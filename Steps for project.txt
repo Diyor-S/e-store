@@ -1,0 +1,15 @@
+Models:
+
+1.Category products:
+
+
+2.Html page for product with its desc,photo etc.
+through this link: https://codepen.io/BlackStar1991/pen/bRVdyR
+
+
+
+3. Laptop: ASUS Zenbook S 13 OLED
+$1099.99 $1399.99
+
+4. Iphone 13 pro
+$799.99 $999.99

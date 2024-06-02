@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+
+{% block link %}
+<link rel="stylesheet" href="{% static 'assets/product-list.css' %}">
+
+{% include 'components/_links.html' %}
+{% endblock link %}
+
+
+{% block main %}
+
+<div class="py-3 py-md-5 bg-light">
+    <div class="container">
+        {% for c in categories %}
+        <div class="row">
+            <div class="col-md-12">
+                <a href="{% url 'sub-category-list' c.id %}" style="color: black;">
+                    <h1 class="mb-4">{{ c.title }}</h1>
+                </a>
+            </div>
+
+            {% for pr_category in c.category.all %}
+
+            {% for p in pr_category.product_category.all %}
+
+            <div class="col-md-3">
+                <div class="product-card">
+                    <div class="product-card-img">
+                        {% if p.status == True %}
+                        <label class="stock bg-success">В наличии </label>
+                        <div style="text-align: center;">
+                            <label class="bg-success text-white" style="position: absolute; border-radius: 4px;
+                            padding: 2px 12px; margin-top: 8px; margin-left: 90px ;font-size: 12px; text-align: right;
+                            "
+                            >
+                                -{{ p.get_discount_percentage }}%
+                            </label>
+                        </div>
+                        {% else %}
+                        <label class="stock bg-dark-subtle">Нет в наличии </label>
+                        <div style="text-align: center;">
+                            <label class="bg-dark-subtle text-white
+" style="position: absolute; border-radius: 4px;
+                            padding: 2px 12px; margin-top: 8px; margin-left: 90px ;font-size: 12px; text-align: right;
+                            "
+                            >
+                                -{{ p.get_discount_percentage }}%
+                            </label>
+                        </div>
+                        {% endif %}
+                        <a href="{% url 'product-detail' p.id %}">
+                            <img src="{{ p.image.url }}" style="width: 315px; height: 205px; background-size: cover;"
+                                 alt="">
+                        </a>
+
+                    </div>
+                    <div class="product-card-body">
+                        <a href="{% url 'pr_category-product-list' p.category.id %}" style="color: black;">
+                            <p class="product-category"> {{ p.category.title }}</p>
+                        </a>
+                        <div>
+
+                            <i>{{ p.rating }}</i>
+
+                        </div>
+                        <h5 class="product-name">
+                            <a href="{% url 'product-detail' p.id %}">
+                                {{ p.title }}
+                            </a>
+                        </h5>
+                        <div>
+                            <span class="selling-price">${{ p.price }}</span>
+                            <span class="original-price">${{ p.old_price }}</span>
+                        </div>
+                        <div class="mt-2">
+                            {% if user.is_authenticated and p.id in in_cart %}
+                            <a href="{% url 'cart' %}" class="btn btn1 bg-success text-light"> <i
+                                    class="fa fa-check"></i>
+                                Уже в корзине </a>
+                            {% else %}
+                            <a href="{% url 'add-to-cart' p.id %}" class="btn btn1"> <i
+                                    class="fa fa-shopping-cart"></i> Добавить в корзину </a>
+                            {% endif %}
+                            {% if user.is_authenticated and p.id in in_wishlist %}
+                            <a href="{% url 'wishlist' %}" class="btn btn1 bg-success text-light"> <i
+                                    class="fa fa-check"></i>
+                                В избранном </a>
+                            {% else %}
+                            <a href="{% url 'add-to-wishlist' p.id %}" class="btn btn1"> <i
+                                    class="fa fa-heart"></i>
+                                В избранное </a>
+                            {% endif %}
+                            <a href="{% url 'add-review' p.id %}" class="btn btn1"
+                               style="position: relative; left: 80px;">
+                                <i class="fa fa-comment">
+
+                                </i> Оставить отзыв
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% endfor %}
+
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock main %}

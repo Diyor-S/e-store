@@ -1,0 +1,179 @@
+{% load static %}
+
+
+<div class="main-navbar shadow-sm sticky-top">
+    <div class="top-navbar">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-2 my-auto d-none d-sm-none d-md-block d-lg-block">
+                    <h5 class="brand-name">E-STORE</h5>
+                </div>
+                <div class="col-md-5 my-auto">
+                    <form action="{% url 'search' %}" method="get" role="search">
+                        <div class="input-group">
+                            <input type="search" placeholder="Поиск товаров" class="form-control" name="q"/>
+                            <button class="btn btn-info" style="width: 40px; height: 50px;" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-5 my-auto">
+                    <ul class="nav justify-content-end">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'cart' %}">
+                                <i class="fa fa-shopping-cart"></i> Корзина ({{ cart_count }})
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'wishlist' %}">
+                                {% if user.is_authenticated %}
+                                <i class="fa fa-heart"></i> Избранное ({{ wishlist_items.count }})
+                                {% else %}
+                                <i class="fa fa-heart"></i> Избранное (0)
+                                {% endif %}
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-user"></i> {{ user.username }}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                {% if user.is_authenticated %}
+                                <li><a class="dropdown-item" href="{% url 'profile' user.id %}"><i
+                                        class="fa fa-user"></i>
+                                    Профиль </a></li>
+                                <li><a class="dropdown-item" href="{% url 'wishlist' %}"><i class="fa fa-heart"></i> Избранное </a></li>
+                                <li><a class="dropdown-item" href="{% url 'cart' %}"><i class="fa fa-shopping-cart"></i> Корзина </a>
+                                </li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i>
+                                    Выйти из аккаунта </a></li>
+                                {% else %}
+                                <li><a class="dropdown-item bg-blue" href="{% url 'sign-up' %}"><i
+                                        class="fa fa-user"></i>Регистрация </a></li>
+                                <li><a class="dropdown-item" href="{% url 'login' %}"><i class="fa fa-sign-in"></i>
+                                    Войти </a></li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">На главную</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Категории ({{ categories.count }})
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for c in categories %}
+                            <li><a class="dropdown-item" href="{% url 'sub-category-list' c.id %}"><i class="fa fa-list-alt"></i> {{ c.title }} </a>
+                                {% endfor %}
+
+                            </li>
+                        </ul>
+
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about-us' %}">О нас</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Электроника
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for prc in pr_categories %}
+
+                            {% if prc.category.title == "Электроника" %}
+                            <li><a class="dropdown-item" href="{% url 'pr_category-product-list' prc.id %}"><i class="fa fa-list-alt"></i> {{ prc.title }} </a>
+                            </li>
+                            {% endif %}
+
+                            {% endfor %}
+
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Для кухни
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for prc in pr_categories %}
+                            {% if prc.category.title == "Для кухни" %}
+                            <li><a class="dropdown-item" href="{% url 'pr_category-product-list' prc.id %}"><i class="fa fa-list-alt"></i> {{ prc.title }} </a>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Книги | Манга
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for prc in pr_categories %}
+                            {% if prc.category.title == "Книги | Манга" %}
+                            <li><a class="dropdown-item" href="{% url 'pr_category-product-list' prc.id %}"><i class="fa fa-list-alt"></i> {{ prc.title }} </a>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Музыкальные инструменты
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for prc in pr_categories %}
+                            {% if prc.category.title == "Музыкальные инструменты" %}
+                            <li><a class="dropdown-item" href="{% url 'pr_category-product-list' prc.id %}"><i class="fa fa-list-alt"></i> {{ prc.title }} </a>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Мебель
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for prc in pr_categories %}
+                            {% if prc.category.title == "Мебель" %}
+                            <li><a class="dropdown-item" href="{% url 'pr_category-product-list' prc.id %}"><i class="fa fa-list-alt"></i> {{ prc.title }} </a>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+

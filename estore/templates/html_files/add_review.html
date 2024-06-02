@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block link %}
+<link href={% static "assets/edit_profile.css" %} rel="stylesheet" type="text/css" media="all" />
+<link href={"% static "//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" %} rel="stylesheet">
+{% endblock link %}
+
+{% block carousel %}
+
+{% endblock carousel %}
+
+
+{% block main %}
+
+<div class="main-w3layouts wrapper">
+    <h1>Оставить отзыв</h1>
+    <div class="main-agileinfo">
+        <div class="agileits-top">
+            <form action="{% url 'add-review' product.id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {{ form.as_p }}
+                <br>
+                <div>
+                    <input type="submit" value="Оставить отзыв">
+                </div>
+                <div>
+                    <a href="{% url 'product-detail' product.id %}"><input type="button" value="Отмена"></a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <ul class="colorlib-bubbles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
+
+
+{% endblock main %}

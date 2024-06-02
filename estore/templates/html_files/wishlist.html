@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block link %}
+<link rel="stylesheet" href="{% static 'assets/components/cart.css' %}">
+{% endblock link %}
+
+{% block carousel %}
+
+{% endblock carousel %}
+
+{% block main %}
+{% if wishlist_items %}
+   <div class="py-3 py-md-5 bg-light">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="shopping-cart">
+
+                        <div class="cart-header d-none d-sm-none d-mb-block d-lg-block">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4>Товары</h4>
+                                </div>
+                                <div class="col-md-2">
+                                    <h4>Дата добавления</h4>
+                                </div>
+                                <div class="col-md-2" style="position: relative; left: 40px;">
+                                    <h4>Цена </h4>
+                                </div>
+                                <div class="col-md-2">
+                                    <h4>Удалить</h4>
+                                </div>
+                            </div>
+                        </div>
+                        {% for item in wishlist_items %}
+                        <div class="cart-item">
+                            <div class="row">
+                                <div class="col-md-6 my-auto">
+                                    <a href="{% url 'product-detail' item.product.id %}">
+                                        <label class="product-name">
+                                            <img src="{{ item.product.image.url }}" style="width: 50px; height: 50px" alt="">
+                                            {{ item.product.title }}
+                                        </label>
+                                    </a>
+                                </div>
+                                <div class="col-md-2 my-auto">
+                                    <label for="">{{ item.added_at }}</label>
+                                </div>
+                                <div class="col-md-2 col-7 my-auto" style="position: relative; left: 30px;">
+                                    <label class="price"> ${{ item.product.price }} </label>
+                                </div>
+                                <div class="col-md-2 col-5 my-auto">
+                                    <div class="remove">
+                                        <a href="{% url 'remove-from-wishlist' item.product.id %}" class="btn btn-danger btn-sm" style="position: relative; right: 7px;">
+                                            <i class="fa fa-trash"></i> Удалить
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        {% else %}
+                        <div style="text-align: center; margin-top: 80px; margin-bottom: 80px; font-family: arial;
+font-weight: bold;">
+                            <h1>Нет товаров в избраннном. Добавьте <a href="{% url 'index' %}">здесь</a>.</h1>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+{% endif %}
+{% endblock main %}

@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block link %}
+<link rel="stylesheet" href="{% static 'assets/checkout.css' %}">
+
+{% endblock link %}
+
+{% block carousel %}
+
+{% endblock carousel %}
+
+{% block main %}
+
+<div class="py-3 py-md-4 checkout">
+    <div class="container">
+        <h4>Заказ</h4>
+        <hr>
+
+        <div class="row">
+            <div class="col-md-12 mb-4">
+                <div class="shadow bg-white p-3">
+                    <h4 class="text-primary">
+                        Общая сумма:
+                        <span class="float-end"> ${{ total }}</span>
+                    </h4>
+
+                    <hr>
+                    <div class="cart-header d-none d-sm-none d-sm-none d-md-block d-lg-block">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>Products</h4>
+                            </div>
+                            <div class="col-md-1" style="position: relative; right: 20px; text-align: center;">
+                                <h4>Sub Total</h4>
+                            </div>
+                            <div class="col-md-1" style="position: relative; left: 100px;">
+                                <h4>Price</h4>
+                            </div>
+
+                            <div class="col-md-1" style="position: relative; left: 175px;">
+                                <h4>Quantity</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% for cart_item in cart_items %}
+                    <div class="cart-item mt-3">
+                        <div class="row mt-4">
+                            <div class="col-md-6 my-auto">
+                                <a href="{% url 'product-detail' cart_item.product.id %}">
+                                    <label class="product-name" style=" font-weight: bold; cursor: pointer !important;">
+                                        <img src="{{ cart_item.product.image.url }}" style="width: 90px; height: 70px"
+                                             alt="">
+                                        {{ cart_item.product.title }}
+                                    </label>
+                                </a>
+                            </div>
+
+                            <div class="col-md-2 my-auto" style="position: relative; right: 5px; font-weight: bold;">
+                                <label class="price">${{ cart_item.sub_total }} </label>
+                            </div>
+
+                            <div class="col-md-2 my-auto" style="position: relative; right: 10px; font-weight: bold;">
+                                <label class="price">${{ cart_item.product.price }} </label>
+                            </div>
+
+                            <div class="col-md-2 col-7 my-auto">
+                                <div class="quantity">
+                                    <div>
+                                        <span style=" font-weight: bold;">
+                                            {{ cart_item.quantity}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% endfor %}
+                            <big class="mt-4">* Товары будут доставлены в течении недели.</big>
+                            <br/>
+                            <big class="mt-1">* Никаких других затрат не потребуется.</big>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="col-md-12 mt-4">
+            <div class="shadow bg-white p-3">
+                <h4 class="text-primary">
+                    Заполните форму
+                </h4>
+                <hr>
+
+                <form action="" method="POST" enctype="multipart/form-data">
+
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label> Полное имя: </label>
+                            <div>
+                                {{ form.full_name }}
+                            </div>
+
+
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label> Номер телефона: </label>
+                            <div>
+                                {{ form.phone_number }}
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label> Электронная почта: </label>
+                            <div>
+                                {{ form.email }}
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label> Адрес: </label>
+                            <div>
+                                {{ form.address }}
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <label> Комментарий к заказу: </label>
+                            <div>
+                                {{ form.order_note }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 mb-3 text-center">
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary" style="width: 500px; height: 60px; border-radius: 30px;
+font-family: arial; color: white; font-size: 32px;">
+                                    Заказать
+                                </button>
+                                <div class="mt-4">
+                                    <a href="{% url 'cart' %}" type="button" class="btn btn-primary" style="width: 500px; height: 60px; border-radius: 30px;
+font-family: arial; color: white; font-size: 32px;">
+                                        Назад
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock main %}
+
+{% block script %}
+
+{% endblock script %}

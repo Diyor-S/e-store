@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block link %}
+<link rel="stylesheet" href="{% static 'assets/components/cart.css' %}">
+{% endblock link %}
+
+{% block carousel %}
+
+{% endblock carousel %}
+
+{% block main %}
+{% if cart_items %}
+<div class="py-3 py-md-5 bg-light">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="shopping-cart">
+
+                    <div class="cart-header d-none d-sm-none d-sm-none d-md-block d-lg-block">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>Products</h4>
+                            </div>
+                            <div class="col-md-1" style="position: relative; right: 15px;">
+                                <h4>Sub Total</h4>
+                            </div>
+                            <div class="col-md-1" style="position: relative; left: 30px;">
+                                <h4>Price</h4>
+                            </div>
+
+                            <div class="col-md-1" style="position: relative; left: 95px;">
+                                <h4>Quantity</h4>
+                            </div>
+                            <div class="col-md-3" style="position: relative; left: 170px;">
+                                <h4>Remove</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% for cart_item in cart_items %}
+                    <div class="cart-item">
+                        <div class="row">
+                            <div class="col-md-6 my-auto">
+                                <a href="{% url 'product-detail' cart_item.product.id %}">
+                                    <label class="product-name">
+                                        <img src="{{ cart_item.product.image.url }}" style="width: 90px; height: 70px"
+                                             alt="">
+                                        {{ cart_item.product.title }}
+                                    </label>
+                                </a>
+                            </div>
+
+                            <div class="col-md-2 my-auto" style="position: relative; right: 13px;">
+                                <label class="price">${{ cart_item.sub_total }} </label>
+                            </div>
+
+                            <div class="col-md-2 my-auto" style="position: relative; right: 88px;">
+                                <label class="price">${{ cart_item.product.price }} </label>
+                            </div>
+
+                            <div class="col-md-2 col-7 my-auto">
+                                <div class="quantity">
+                                    <div class="input-group" style="position: relative; right: 160px;">
+                                        <a href="{% url 'decrement-from-cart' cart_item.product.id %}" class="btn btn1"><i
+                                                class="fa fa-minus"></i></a>
+                                        <input type="text" value="{{ cart_item.quantity }}" class="input-quantity"/>
+
+
+                                        <a href="{% url 'add-to-cart' cart_item.product.id %}" class="btn btn1"><i
+                                                class="fa fa-plus"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-5 my-auto" style="position: relative;">
+                                <div class="remove" style="left: 1157px; position: absolute; top: -63px;">
+                                    <a href="{% url 'remove-from-cart' cart_item.product.id %}"
+                                       class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash"></i> Remove
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                    <div class="py-3 py-md-4 checkout">
+                        <div class="container">
+                            <h4> Заказ </h4>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-md-12 mb-4">
+                                    <div class="shadow bg-white p-3">
+                                        <h4 class="text-primary">
+                                            Общая сумма :
+                                            <span class="float-end"> ${{ total }}</span>
+                                        </h4>
+                                        <hr>
+                                        <big>* Товары будут доставлены в течении недели.</big>
+                                        <br/>
+                                        <big>* Никаких других затрат не потребуется.</big>
+                                        <div class="mt-4 text-center">
+                                            <a href="{% url 'checkout' %}" type="button" class="btn btn-primary" style="width: 500px; height: 60px; border-radius: 30px;
+font-family: arial; color: white; font-size: 32px;">
+                                                Перейти к заказу
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                {% else %}
+                                <div style="text-align: center; margin-top: 80px; margin-bottom: 80px; font-family: arial;
+font-weight: bold;">
+                                    <h1>Нет товаров в корзине. Добавьте <a href="{% url 'index' %}">здесь</a>.</h1>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            {% endif %}
+            {% endblock main %}

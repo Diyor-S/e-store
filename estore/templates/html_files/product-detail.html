@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock title %}
+
+{% block link %}
+<link rel="stylesheet" href="{% static 'assets/product-detail.css' %}">
+
+{% endblock link %}
+
+{% block carousel %}
+
+{% endblock carousel %}
+
+
+{% block main %}
+
+<div class="py-3 py-md-5 bg-light">
+    <div class="container">
+        <div class="col-md-5 mt-3">
+            <a href="{% url 'sub-category-list' product.get_main_category.id %}" style="color: black;">
+                <h4 class="mb-4" style="background-color: orange; border-radius: 12px; padding: 4px; text-align: center;
+width: 500px; height: 150px; font-family: arial; font-size: 48px; font-weight: bold;">
+                    Категория: {{ product.get_main_category.title }}
+                </h4>
+            </a>
+        </div>
+        <div class="col-md-2">
+            <a href="{% url 'pr_category-product-list' product.category.id %}" style="color: black;">
+                <h4 class="mb-4" style="background-color: orange; border-radius: 12px; padding: 4px; text-align: center;
+width: 350px; height: 120px; font-family: arial; font-size: 32px; font-weight: bold;">
+                    Подкатегория: {{ product.category.title }}
+                </h4>
+            </a>
+        </div>
+        <div class="row">
+            <div class="col-md-5 mt-3">
+                <div class="bg-white border border-4">
+
+                    <img src="{{ product.image.url }}" class="" alt="Img"
+                         style="background-size: cover; width: 520px; height: 550px; text-align: center; overflow: hidden;">
+                </div>
+            </div>
+            <div class="col-md-7 mt-3">
+                <div class="product-view">
+                    <h4 class="product-name">
+                            <span style="font-size: 36px; font-weight: bold; background-color: orange; color: dark;
+                                        padding: 10px; border-radius: 8px;">
+
+
+                                {{ product.title }}
+                            </span>
+                        {% if product.status == True %}
+                        <label class="label-stock bg-success">В наличии</label>
+                        {% else %}
+                        <label class="label-stock bg-dark-subtle">Нет в наличии</label>
+                        {% endif %}
+                    </h4>
+                    <hr>
+                    <p>
+                            <span style="font-size: 27px; font-weight: bold; background-color: red; color: pink; padding: 8px;
+                            border-radius: 6px;
+                            ">Скидка -{{product.get_discount_percentage}}
+                            <i class="fa fa-percent" aria-hidden="true"></i>
+                            </span>
+                    </p>
+
+                    <div>
+                            <span class="selling-price"
+                                  style="width: 70px; border-radius: 15px; background-color: cyan; padding: 7px;">
+                                ${{ product.price }}
+                            </span>
+                        <span class="original-price"
+                              style="width: 70px; border-radius: 15px; background-color: cyan; padding: 7px;">
+                                ${{ product.old_price }}
+                            </span>
+                    </div>
+
+                    <div class="mt-2">
+                        {% if in_cart %}
+                        <a href="{% url 'cart' %}" class="btn btn1 bg-success text-light"> <i class="fa fa-check"></i>
+                            Уже добавлено в корзину </a>
+                        {% else %}
+                        <a href="{% url 'add-to-cart' product.id %}" class="btn btn1"> <i
+                                class="fa fa-shopping-cart"></i> Добавить в корзину </a>
+                        {% endif %}
+                        {% if in_wishlist %}
+                        <a href="{% url 'wishlist' %}" class="btn btn1 bg-success text-light"> <i class="fa fa-check"></i>
+                            Уже добавлено в избранное </a>
+                        {% else %}
+                        <a href="{% url 'add-to-wishlist' product.id %}" class="btn btn1"> <i class="fa fa-heart"></i>
+                            Добавить в избранное </a>
+                        {% endif %}
+                    </div>
+                    <hr>
+                    <div class="mb-0">
+                        <h5 class="mb-0" style="font-size: 32px; background-color: #3CB371; width: 350px; padding: 8px;
+                                 font-family: arial; height: 60px; border-radius: 12px;">
+                            Короткое описание
+                        </h5>
+                        <br>
+                        <p style="background-color: #9ACD32 ; width: 725px; height: 213px; padding: 8px;
+                                     font-size: 20px; font-family: arial; margin-top: 0px; margin-bottom: 5px;
+                                     border-radius: 3px">
+                            {{ product.short_desc|truncatewords:30 }}
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 mt-3">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-start bg-info text-dark">
+
+
+                        <button class="btn btn-light m-2" style="width: 200px; height: 45px; color: #008000;
+border-radius: 16px; font-family: arial; font-size: 21px; font-weight: bold; padding: 4px;">
+                            Отзывы ({{ product.reviews.count }})
+                        </button>
+
+
+                        <a href="{% url 'add-review' product.id %}">
+                            <button class="btn btn-light m-2" style="width: 200px; height: 45px; color: #008000;
+border-radius: 16px; font-family: arial; font-size: 21px; font-weight: bold; padding: 4px;">
+                                <i class="fa fa-comment"> Оставить отзыв</i>
+                            </button>
+                        </a>
+
+                    </div>
+                    {% for r in reviews %}
+                    <div class="card-body bg-info">
+
+                        <div class="d-flex border-bottom pb-6 mb-6">
+                            <!-- img -->
+                            <!-- img -->
+                            {% for profile in profiles %}
+                            {% if profile.user == r.user %}
+                            {% if profile.image %}
+                            <img src="{{ profile.image.url }}"
+                                 alt="avatar"
+                                 class="rounded-circle img-fluid" style="width: 100px; height: 80px;
+">
+                            {% else %}
+                            <img src="{% static 'base_pr_image.jpg' %}"
+                                 alt="avatar"
+                                 class="rounded-circle img-fluid" style="width: 100px; height: 80px;">
+                            {% endif %}
+                            {% endif %}
+                            {% endfor %}
+
+                            <div class="ms-5">
+                                <h6 class="mb-1">{{ r.user.username }}</h6>
+
+                                <!-- select option -->
+                                <!-- content -->
+                                <p class="small">
+                                    <span class="text-muted"> {{ r.created_at}} </span>
+                                </p>
+                                <!-- rating -->
+                                <div class="mb-2">
+                                    {{ r.rating }}
+                                </div>
+
+                                <p>
+                                    {{ r.review }}
+                                </p>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 mt-3">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-start bg-info text-dark">
+                        <button class="btn btn-light m-2" style="width: 200px; height: 45px; color: #008000;
+border-radius: 16px; font-family: arial; font-size: 21px; font-weight: bold; padding: 4px;">
+                            Характеристики
+                        </button>
+                    </div>
+                    <div class="card-body bg-info">
+                        {% if characteristics %}
+                        {% for pr_char in characteristics %}
+                        <div style="font-size: 21px; font-family: arial; color: #008000;">
+                            {{ pr_char.title }}
+                        </div>
+                        <p style="font-size: 18px; color: #008000;">
+                            {{ pr_char.characteristic }}
+                        </p>
+                        {% endfor %}
+                        {% else %}
+                        <div style="font-size: 21px; font-family: arial; color: #008000;">
+                            Нет характеристик у этого товара.
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 mt-3">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-start bg-info text-dark">
+                        <button class="btn btn-light m-2" style="width: 200px; height: 45px; color: #008000;
+border-radius: 16px; font-family: arial; font-size: 21px; font-weight: bold; padding: 4px;">
+                            Описание
+                        </button>
+                    </div>
+                    <div class="card-body bg-info">
+                        <p style="font-size: 21px; color: #008000;">
+                            {{ product.desc }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock main %}
+
+{% block script %}
+{% include 'components/_scripts.html' %}
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="{% static 'assets/components/product_quantity.js' %}"></script>
+{% endblock script %}
